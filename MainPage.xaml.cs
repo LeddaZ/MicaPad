@@ -17,6 +17,7 @@ namespace MicaPad
     {
 
         private bool hasUnsavedChanges = false;
+        private Windows.Storage.StorageFile currentFile;
 
         public MainPage()
         {
@@ -211,6 +212,10 @@ namespace MicaPad
                     await errorDialog.ShowAsync();
                 }
             }
+            // Store the current file
+            currentFile = file;
+            // The file has just been opened, so there are no unsaved changes
+            hasUnsavedChanges = false;
         }
 
         private void SaveButton_Click(object sender, RoutedEventArgs e)
@@ -218,21 +223,11 @@ namespace MicaPad
             _ = Save();
         }
 
-        // Shows the file save dialog and save the file afterwards
+        // Saves the file
         private async Task Save()
         {
-            Windows.Storage.Pickers.FileSavePicker savePicker = new Windows.Storage.Pickers.FileSavePicker
-            {
-                SuggestedStartLocation = Windows.Storage.Pickers.PickerLocationId.DocumentsLibrary
-            };
+            Windows.Storage.StorageFile file = currentFile;
 
-            // Dropdown of file types the user can save the file as
-            savePicker.FileTypeChoices.Add("Rich Text", new List<string>() { ".rtf" });
-
-            // Default file name if the user does not type one in or select a file to replace
-            savePicker.SuggestedFileName = "New Document";
-
-            Windows.Storage.StorageFile file = await savePicker.PickSaveFileAsync();
             if (file != null)
             {
                 /* Prevent updates to the remote version of the file until we
@@ -251,6 +246,47 @@ namespace MicaPad
                     Windows.UI.Popups.MessageDialog errorBox = new Windows.UI.Popups.MessageDialog("File " + file.Name + " couldn't be saved.");
                     await errorBox.ShowAsync();
                 }
+                // Since the file has been saved, there are no unsaved changes now
+                hasUnsavedChanges = false;
+            }
+        }
+
+        // Shows the file save dialog and saves the file afterwards
+        private async void SaveAsButton_Click(object sender, RoutedEventArgs e)
+        {
+            Windows.Storage.Pickers.FileSavePicker savePicker = new Windows.Storage.Pickers.FileSavePicker
+            {
+                SuggestedStartLocation = Windows.Storage.Pickers.PickerLocationId.DocumentsLibrary
+            };
+
+            // Dropdown of file types the user can save the file as
+            savePicker.FileTypeChoices.Add("Rich Text", new List<string>() { ".rtf" });
+
+            // Default file name if the user does not type one in or select a file to replace
+            savePicker.SuggestedFileName = "New Document";
+
+            Windows.Storage.StorageFile file = await savePicker.PickSaveFileAsync();
+
+            if (file != null)
+            {
+                /* Prevent updates to the remote version of the file until we
+                 * finish making changes and call CompleteUpdatesAsync */
+                Windows.Storage.CachedFileManager.DeferUpdates(file);
+                // write to file
+                Windows.Storage.Streams.IRandomAccessStream randAccStream = await file.OpenAsync(Windows.Storage.FileAccessMode.ReadWrite);
+
+                editor.Document.SaveToStream(Windows.UI.Text.TextGetOptions.FormatRtf, randAccStream);
+
+                /* Let Windows know that we're finished changing the file so the
+                 * other app can update the remote version of the file */
+                Windows.Storage.Provider.FileUpdateStatus status = await Windows.Storage.CachedFileManager.CompleteUpdatesAsync(file);
+                if (status != Windows.Storage.Provider.FileUpdateStatus.Complete)
+                {
+                    Windows.UI.Popups.MessageDialog errorBox = new Windows.UI.Popups.MessageDialog("File " + file.Name + " couldn't be saved.");
+                    await errorBox.ShowAsync();
+                }
+                // Store the current file
+                currentFile = file;
                 // Since the file has been saved, there are no unsaved changes now
                 hasUnsavedChanges = false;
             }

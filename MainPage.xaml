@@ -132,8 +132,10 @@
         <AppBarButton x:Name="openFileButton" Icon="OpenFile" Label="Open" Click="OpenButton_Click" CornerRadius="4"/>
         <AppBarButton x:Name="saveFileButton" Icon="Save" Label="Save" Click="SaveButton_Click"
                       RelativePanel.RightOf="openFileButton" Margin="8,0,0,0" CornerRadius="4"/>
-        <AppBarButton x:Name="aboutButton" Icon="Help" Label="About" Click="AboutButton_Click"
+        <AppBarButton x:Name="saveFileAsButton" Icon="SaveLocal" Label="Save as" Click="SaveAsButton_Click"
                       RelativePanel.RightOf="saveFileButton" Margin="8,0,0,0" CornerRadius="4"/>
+        <AppBarButton x:Name="aboutButton" Icon="Help" Label="About" Click="AboutButton_Click"
+                      RelativePanel.RightOf="saveFileAsButton" Margin="8,0,0,0" CornerRadius="4"/>
         <AppBarButton x:Name="warningButton" Icon="ReportHacked" Label="Warning" Click="WarningButton_Click"
                       RelativePanel.RightOf="aboutButton" Margin="8,0,0,0" CornerRadius="4" Visibility="Collapsed"/>
 
