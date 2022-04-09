@@ -17,7 +17,6 @@ namespace MicaPad
     {
 
         private bool hasUnsavedChanges = false;
-        private Version latestVersion;
 
         public MainPage()
         {
@@ -98,7 +97,7 @@ namespace MicaPad
             IReadOnlyList<Release> releases = await client.Repository.Release.GetAll("LeddaZ", "MicaPad");
 
             // Setup versions
-            latestVersion = new Version(releases[0].Name);
+            var latestVersion = new Version(releases[0].Name);
             Version localVersion = new Version(GetVersion());
 
             // Compare the versions
