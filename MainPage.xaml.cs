@@ -303,7 +303,7 @@ namespace MicaPad
             ContentDialog aboutDialog = new ContentDialog()
             {
                 Title = "About MicaPad",
-                Content = $"MicaPad is a Notepad alternative with some additional features, like Rich Text support and the beautiful Mica backdrop (which inspired the name).\nRunning on Windows {GetWinVer()} build {GetWinBuild()}.",
+                Content = $"MicaPad is a Notepad alternative with some additional features, like Rich Text support and the beautiful Mica backdrop (which inspired the name).\nVersion {GetVersion()}, running on Windows {GetWinVer()} build {GetWinBuild()}.",
                 CloseButtonText = "Close",
                 CornerRadius = new CornerRadius(8)
             };
