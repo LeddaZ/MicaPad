@@ -17,6 +17,7 @@ namespace MicaPad
     {
 
         private bool hasUnsavedChanges = false;
+        private int editCount = 0;
         private Windows.Storage.StorageFile currentFile;
 
         public MainPage()
@@ -149,6 +150,9 @@ namespace MicaPad
         // Shows the open file dialog and opens the file once one is selected
         private async void OpenButton_Click(object sender, RoutedEventArgs e)
         {
+            /* Workaround to stop the RichEditBox from detecting unsaved changes even if the
+             * file has just been opened */
+            editCount = 0;
             /* Checks if the current document has unsaved changes and shows a confirmation
              * dialog in that case */
             if (hasUnsavedChanges)
@@ -216,6 +220,7 @@ namespace MicaPad
             currentFile = file;
             // The file has just been opened, so there are no unsaved changes
             hasUnsavedChanges = false;
+            editCount = 0;
         }
 
         private void SaveButton_Click(object sender, RoutedEventArgs e)
@@ -367,7 +372,11 @@ namespace MicaPad
         // Detects when the document has been modified (it will now have unsaved changes)
         private void Editor_TextChanged(object sender, RoutedEventArgs e)
         {
-            hasUnsavedChanges = true;
+            if (editCount > 0)
+            {
+                hasUnsavedChanges = true;
+            }
+            editCount++;
         }
 
     }
