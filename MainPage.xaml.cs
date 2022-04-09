@@ -21,7 +21,7 @@ namespace MicaPad
         public MainPage()
         {
             this.InitializeComponent();
-            // Gets all fonts installed system-wide and adds them to the font flyout.
+            // Gets all fonts installed system-wide and adds them to the font flyout
             var fonts = Microsoft.Graphics.Canvas.Text.CanvasTextFormat.GetSystemFontFamilies();
             int i = 0;
             foreach (var item in fonts)
@@ -34,15 +34,20 @@ namespace MicaPad
                 FontFlyout.Items.Insert(i, flyoutItem);
                 i++;
             }
-            // Sets corner radius for all items in the font flyout.
+            // Sets corner radius for all items in the font flyout
             foreach (var item in FontFlyout.Items)
             {
                 item.CornerRadius = new CornerRadius(4);
             }
+            // Show warning button on Windows 10
+            if (GetWinVer().Equals("10")) {
+                warningButton.Visibility = Visibility.Visible;
+            }
+            // Run update check on app startup
             _ = CheckUpdates();
         }
 
-        // Returns white or black based on the given color.
+        // Returns white or black based on the given color
         private Color PickTextColor(SolidColorBrush sourceColor)
         {
             var r = sourceColor.Color.R;
@@ -51,7 +56,7 @@ namespace MicaPad
             return (((r * 0.299) + (g * 0.587) + (b * 0.114)) > 100) ? Color.FromArgb(255, 0, 0, 0) : Color.FromArgb(255, 255, 255, 255);
         }
 
-        // Sets my custom button style.
+        // Sets my custom button style
         private Style SetButtonStyle(bool isDefaultButton)
         {
             var buttonStyle = new Style(typeof(Button));
@@ -125,14 +130,14 @@ namespace MicaPad
             }
         }
 
-        // Sets the chosen font size.
+        // Sets the chosen font size
         private void SizeFlyoutItem_Click(object sender, RoutedEventArgs e)
         {
             MenuFlyoutItem item = (MenuFlyoutItem)sender;
             editor.Document.Selection.CharacterFormat.Size = float.Parse(item.Text);
         }
 
-        // Sets the chosen font family.
+        // Sets the chosen font family
         private void FontFlyoutItem_Click(object sender, RoutedEventArgs e)
         {
             MenuFlyoutItem item = (MenuFlyoutItem)sender;
@@ -140,11 +145,11 @@ namespace MicaPad
 
         }
 
-        // Shows the open file dialog and opens the file once one is selected.
+        // Shows the open file dialog and opens the file once one is selected
         private async void OpenButton_Click(object sender, RoutedEventArgs e)
         {
             /* Checks if the current document has unsaved changes and shows a confirmation
-             * dialog in this case. */
+             * dialog in that case */
             if (hasUnsavedChanges)
             {
                 ContentDialog unsavedChangesDialog = new ContentDialog
@@ -165,7 +170,7 @@ namespace MicaPad
                 {
                     case ContentDialogResult.Primary:
                         /* await is needed, otherwise the save and open dialogs will show
-                         * at the same time. */
+                         * at the same time */
                         await Save();
                         break;
                     case ContentDialogResult.Secondary:
@@ -175,7 +180,7 @@ namespace MicaPad
                 }
             }
 
-            // Opens the rtf file.
+            // Opens the rtf file
             Windows.Storage.Pickers.FileOpenPicker open = new Windows.Storage.Pickers.FileOpenPicker
             {
                 SuggestedStartLocation = Windows.Storage.Pickers.PickerLocationId.DocumentsLibrary
@@ -190,7 +195,7 @@ namespace MicaPad
                 {
                     Windows.Storage.Streams.IRandomAccessStream randAccStream = await file.OpenAsync(Windows.Storage.FileAccessMode.Read);
 
-                    // Load the file into the Document property of the RichEditBox.
+                    // Load the file into the Document property of the RichEditBox
                     editor.Document.LoadFromStream(Windows.UI.Text.TextSetOptions.FormatRtf, randAccStream);
                 }
                 catch (Exception)
@@ -213,7 +218,7 @@ namespace MicaPad
             _ = Save();
         }
 
-        // Shows the file save dialog and save the file afterwards.
+        // Shows the file save dialog and save the file afterwards
         private async Task Save()
         {
             Windows.Storage.Pickers.FileSavePicker savePicker = new Windows.Storage.Pickers.FileSavePicker
@@ -230,28 +235,28 @@ namespace MicaPad
             Windows.Storage.StorageFile file = await savePicker.PickSaveFileAsync();
             if (file != null)
             {
-                // Prevent updates to the remote version of the file until we
-                // finish making changes and call CompleteUpdatesAsync.
+                /* Prevent updates to the remote version of the file until we
+                 * finish making changes and call CompleteUpdatesAsync */
                 Windows.Storage.CachedFileManager.DeferUpdates(file);
                 // write to file
                 Windows.Storage.Streams.IRandomAccessStream randAccStream = await file.OpenAsync(Windows.Storage.FileAccessMode.ReadWrite);
 
                 editor.Document.SaveToStream(Windows.UI.Text.TextGetOptions.FormatRtf, randAccStream);
 
-                // Let Windows know that we're finished changing the file so the
-                // other app can update the remote version of the file.
+                /* Let Windows know that we're finished changing the file so the
+                 * other app can update the remote version of the file */
                 Windows.Storage.Provider.FileUpdateStatus status = await Windows.Storage.CachedFileManager.CompleteUpdatesAsync(file);
                 if (status != Windows.Storage.Provider.FileUpdateStatus.Complete)
                 {
                     Windows.UI.Popups.MessageDialog errorBox = new Windows.UI.Popups.MessageDialog("File " + file.Name + " couldn't be saved.");
                     await errorBox.ShowAsync();
                 }
-                // Since the file has been saved, there are no unsaved changes now.
+                // Since the file has been saved, there are no unsaved changes now
                 hasUnsavedChanges = false;
             }
         }
 
-        // Shows the about dialog.
+        // Shows the about dialog
         private async void AboutButton_Click(object sender, RoutedEventArgs e)
         {
             ContentDialog aboutDialog = new ContentDialog()
@@ -265,7 +270,21 @@ namespace MicaPad
             _ = await aboutDialog.ShowAsync();
         }
 
-        // Enables or disables bold text.
+        // Shows the warning dialog
+        private async void WarningButton_Click(object sender, RoutedEventArgs e)
+        {
+            ContentDialog warningDialog = new ContentDialog()
+            {
+                Title = "Warning",
+                Content = "Since you are using Windows 10, you won't see the Mica backdrop, as it's only supported on Windows 11.",
+                CloseButtonText = "Close",
+                CornerRadius = new CornerRadius(8)
+            };
+            warningDialog.CloseButtonStyle = SetButtonStyle(true);
+            _ = await warningDialog.ShowAsync();
+        }
+
+        // Enables or disables bold text
         private void BoldButton_Click(object sender, RoutedEventArgs e)
         {
             Windows.UI.Text.ITextSelection selectedText = editor.Document.Selection;
@@ -277,7 +296,7 @@ namespace MicaPad
             }
         }
 
-        // Enables or disables italic text.
+        // Enables or disables italic text
         private void ItalicButton_Click(object sender, RoutedEventArgs e)
         {
             Windows.UI.Text.ITextSelection selectedText = editor.Document.Selection;
@@ -289,7 +308,7 @@ namespace MicaPad
             }
         }
 
-        // Enables or disables underlined text.
+        // Enables or disables underlined text
         private void UnderlineButton_Click(object sender, RoutedEventArgs e)
         {
             Windows.UI.Text.ITextSelection selectedText = editor.Document.Selection;
@@ -309,7 +328,7 @@ namespace MicaPad
 
         }
 
-        // Detects when the document has been modified (it will now have unsaved changes).
+        // Detects when the document has been modified (it will now have unsaved changes)
         private void Editor_TextChanged(object sender, RoutedEventArgs e)
         {
             hasUnsavedChanges = true;
