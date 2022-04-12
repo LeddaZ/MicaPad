@@ -504,11 +504,11 @@
                 </MenuFlyout>
             </AppBarButton.Flyout>
         </AppBarButton>
-        <AppBarButton x:Name="boldButton" Icon="Bold" Label="Bold" Click="BoldButton_Click"
+        <AppBarToggleButton x:Name="boldButton" Icon="Bold" Label="Bold" Click="BoldButton_Click"
                       RelativePanel.LeftOf="italicButton" Margin="0,0,8,0" CornerRadius="4"/>
-        <AppBarButton x:Name="italicButton" Icon="Italic" Label="Italic" Click="ItalicButton_Click"
+        <AppBarToggleButton x:Name="italicButton" Icon="Italic" Label="Italic" Click="ItalicButton_Click"
                       RelativePanel.LeftOf="underlineButton" Margin="0,0,8,0" CornerRadius="4"/>
-        <AppBarButton x:Name="underlineButton" Icon="Underline" Label="Underline" Click="UnderlineButton_Click"
+        <AppBarToggleButton x:Name="underlineButton" Icon="Underline" Label="Underline" Click="UnderlineButton_Click"
                       RelativePanel.AlignRightWithPanel="True" CornerRadius="4"/>
 
         <RichEditBox Background="Transparent" BorderThickness="0" Style="{StaticResource RichEditBoxStyle}"                          x:Name="editor" Height="900" RelativePanel.Below="openFileButton"
