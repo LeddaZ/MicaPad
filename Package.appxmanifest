@@ -10,7 +10,7 @@
   <Identity
     Name="879bd25f-daeb-468b-96a9-9d1514f47fc0"
     Publisher="CN=Leonardo Ledda"
-    Version="0.1.1.0" />
+    Version="0.2.0.0" />
 
   <mp:PhoneIdentity PhoneProductId="879bd25f-daeb-468b-96a9-9d1514f47fc0" PhonePublisherId="00000000-0000-0000-0000-000000000000"/>
 
