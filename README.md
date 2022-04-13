@@ -18,7 +18,4 @@ Of course, a good portion of the code has been adapted from [Stack Overflow](htt
 
 ## TODO
 
-- Fix the unsaved changes dialog appearing when it shouldn't
-- Maybe more
-
-Features like images and text color are not planned at the moment, since this is intended as a "supercharged" Notepad; I'm not aiming to make a full WordPad replacement.
+- Maybe image support?
