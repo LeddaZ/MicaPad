@@ -450,6 +450,34 @@
                 </Setter.Value>
             </Setter>
         </Style>
+        
+        <!-- Custom font colors -->
+        <SolidColorBrush x:Key="Blue" Color="#4F81BD"/>
+        <SolidColorBrush x:Key="BlueGray1" Color="#646B86"/>
+        <SolidColorBrush x:Key="BlueGray2" Color="#809EC2"/>
+        <SolidColorBrush x:Key="CoralRed" Color="#9E7C7C"/>
+        <SolidColorBrush x:Key="DarkBlue" Color="#004DBB"/>
+        <SolidColorBrush x:Key="DarkGray" Color="#333333"/>
+        <SolidColorBrush x:Key="DarkGreen" Color="#00B050"/>
+        <SolidColorBrush x:Key="DarkYellow" Color="#CCB400"/>
+        <SolidColorBrush x:Key="Gold" Color="#FFC000"/>
+        <SolidColorBrush x:Key="Gray1" Color="#A5A5A5"/>
+        <SolidColorBrush x:Key="Gray2" Color="#666666"/>
+        <SolidColorBrush x:Key="Green" Color="#8FB08C"/>
+        <SolidColorBrush x:Key="Lavender" Color="#9C85C0"/>
+        <SolidColorBrush x:Key="LightBlue" Color="#4BACC6"/>
+        <SolidColorBrush x:Key="LightGray" Color="#CCCCCC"/>
+        <SolidColorBrush x:Key="OliveGreen1" Color="#9BBB59"/>
+        <SolidColorBrush x:Key="OliveGreen2" Color="#A5B592"/>
+        <SolidColorBrush x:Key="Orange1" Color="#F79646"/>
+        <SolidColorBrush x:Key="Orange2" Color="#D19049"/>
+        <SolidColorBrush x:Key="Orange3" Color="#F3A447"/>
+        <SolidColorBrush x:Key="Pink" Color="#DD8484"/>
+        <SolidColorBrush x:Key="Purple1" Color="#9B00D3"/>
+        <SolidColorBrush x:Key="Purple2" Color="#8064A2"/>
+        <SolidColorBrush x:Key="Red1" Color="#C0504D"/>
+        <SolidColorBrush x:Key="Red2" Color="#D16349"/>
+        <SolidColorBrush x:Key="Yellow1" Color="#DFCE04"/>
     </Page.Resources>
 
     <RelativePanel Margin="20" HorizontalAlignment="Stretch">
@@ -458,6 +486,7 @@
                       RelativePanel.RightOf="openFileButton" Margin="8,0,0,0" CornerRadius="4"/>
         <AppBarButton x:Name="saveFileAsButton" Icon="SaveLocal" Label="Save as" Click="SaveAsButton_Click"
                       RelativePanel.RightOf="saveFileButton" Margin="8,0,0,0" CornerRadius="4"/>
+        
         <AppBarButton x:Name="aboutButton" Icon="Help" Label="About" Click="AboutButton_Click"
                       RelativePanel.RightOf="saveFileAsButton" Margin="8,0,0,0" CornerRadius="4"/>
         <AppBarButton x:Name="warningButton" Icon="ReportHacked" Label="Warning" Click="WarningButton_Click"
@@ -491,6 +520,7 @@
                 </MenuFlyout>
             </AppBarButton.Flyout>
         </AppBarButton>
+        
         <AppBarButton x:Name="fontButton" Icon="Font" Label="Font" RelativePanel.LeftOf="boldButton" Margin="0,0,8,0"
                       CornerRadius="4">
             <AppBarButton.Flyout>
@@ -504,18 +534,193 @@
                 </MenuFlyout>
             </AppBarButton.Flyout>
         </AppBarButton>
+        
         <AppBarToggleButton x:Name="boldButton" Icon="Bold" Label="Bold" Click="BoldButton_Click"
-                      RelativePanel.LeftOf="italicButton" Margin="0,0,8,0" CornerRadius="4"/>
+                            RelativePanel.LeftOf="italicButton" Margin="0,0,8,0" CornerRadius="4"/>
         <AppBarToggleButton x:Name="italicButton" Icon="Italic" Label="Italic" Click="ItalicButton_Click"
-                      RelativePanel.LeftOf="underlineButton" Margin="0,0,8,0" CornerRadius="4"/>
+                            RelativePanel.LeftOf="underlineButton" Margin="0,0,8,0" CornerRadius="4"/>
         <AppBarToggleButton x:Name="underlineButton" Icon="Underline" Label="Underline" Click="UnderlineButton_Click"
-                      RelativePanel.AlignRightWithPanel="True" CornerRadius="4"/>
-
-        <RichEditBox Background="Transparent" BorderThickness="0" Style="{StaticResource RichEditBoxStyle}"                          x:Name="editor" Height="900" RelativePanel.Below="openFileButton"
-                     RelativePanel.AlignLeftWithPanel="True" RelativePanel.AlignRightWithPanel="True"
-                     TextChanged="Editor_TextChanged"/>
+                             CornerRadius="4" RelativePanel.LeftOf="fontColorButton" Margin="0,0,8,0"/>
+        
+        <muxc:DropDownButton x:Name="fontColorButton" BorderThickness="0" AutomationProperties.Name="Font color"
+                             ToolTipService.ToolTip="Font color" Background="Transparent" RelativePanel.AlignRightWithPanel="True"
+                             Height="64" Width="68">
+            <SymbolIcon Symbol="FontColor"/>
+            <muxc:DropDownButton.Flyout>
+                <Flyout Placement="Bottom">
+                    <VariableSizedWrapGrid Orientation="Horizontal" MaximumRowsOrColumns="5">
+                        <VariableSizedWrapGrid.Resources>
+                            <Style TargetType="Ellipse">
+                                <Setter Property="Width" Value="32"/>
+                                <Setter Property="Height" Value="32"/>
+                            </Style>
+                            <Style TargetType="Button">
+                                <Setter Property="Padding" Value="0"/>
+                                <Setter Property="MinWidth" Value="0"/>
+                                <Setter Property="MinHeight" Value="0"/>
+                                <Setter Property="Margin" Value="6"/>
+                                <Setter Property="Background" Value="Transparent"/>
+                                <Setter Property="CornerRadius" Value="100"/>
+                            </Style>
+                        </VariableSizedWrapGrid.Resources>
+                        <Button Click="ColorButton_Click" AutomationProperties.Name="White">
+                            <Button.Content>
+                                <Ellipse Fill="White"/>
+                            </Button.Content>
+                        </Button>
+                        <Button Click="ColorButton_Click" AutomationProperties.Name="Red">
+                            <Button.Content>
+                                <Ellipse Fill="Red"/>
+                            </Button.Content>
+                        </Button>
+                        <Button Click="ColorButton_Click" AutomationProperties.Name="Red1">
+                            <Button.Content>
+                                <Ellipse Fill="{StaticResource Red1}"/>
+                            </Button.Content>
+                        </Button>
+                        <Button Click="ColorButton_Click" AutomationProperties.Name="Red2">
+                            <Button.Content>
+                                <Ellipse Fill="{StaticResource Red2}"/>
+                            </Button.Content>
+                        </Button>
+                        <Button Click="ColorButton_Click" AutomationProperties.Name="Pink">
+                            <Button.Content>
+                                <Ellipse Fill="{StaticResource Pink}"/>
+                            </Button.Content>
+                        </Button>
+                        <Button Click="ColorButton_Click" AutomationProperties.Name="LightGray">
+                            <Button.Content>
+                                <Ellipse Fill="{StaticResource LightGray}"/>
+                            </Button.Content>
+                        </Button>
+                        <Button Click="ColorButton_Click" AutomationProperties.Name="Gold">
+                            <Button.Content>
+                                <Ellipse Fill="{StaticResource Gold}"/>
+                            </Button.Content>
+                        </Button>
+                        <Button Click="ColorButton_Click" AutomationProperties.Name="Orange1">
+                            <Button.Content>
+                                <Ellipse Fill="{StaticResource Orange1}"/>
+                            </Button.Content>
+                        </Button>
+                        <Button Click="ColorButton_Click" AutomationProperties.Name="Orange2">
+                            <Button.Content>
+                                <Ellipse Fill="{StaticResource Orange2}"/>
+                            </Button.Content>
+                        </Button>
+                        <Button Click="ColorButton_Click" AutomationProperties.Name="Orange3">
+                            <Button.Content>
+                                <Ellipse Fill="{StaticResource Orange3}"/>
+                            </Button.Content>
+                        </Button>
+                        <Button Click="ColorButton_Click" AutomationProperties.Name="Gray1">
+                            <Button.Content>
+                                <Ellipse Fill="{StaticResource Gray1}"/>
+                            </Button.Content>
+                        </Button>
+                        <Button Click="ColorButton_Click" AutomationProperties.Name="Yellow">
+                            <Button.Content>
+                                <Ellipse Fill="Yellow"/>
+                            </Button.Content>
+                        </Button>
+                        <Button Click="ColorButton_Click" AutomationProperties.Name="OliveGreen1">
+                            <Button.Content>
+                                <Ellipse Fill="{StaticResource OliveGreen1}"/>
+                            </Button.Content>
+                        </Button>
+                        <Button Click="ColorButton_Click" AutomationProperties.Name="DarkYellow">
+                            <Button.Content>
+                                <Ellipse Fill="{StaticResource DarkYellow}"/>
+                            </Button.Content>
+                        </Button>
+                        <Button Click="ColorButton_Click" AutomationProperties.Name="Yellow1">
+                            <Button.Content>
+                                <Ellipse Fill="{StaticResource Yellow1}"/>
+                            </Button.Content>
+                        </Button>
+                        <Button Click="ColorButton_Click" AutomationProperties.Name="Gray2">
+                            <Button.Content>
+                                <Ellipse Fill="{StaticResource Gray2}"/>
+                            </Button.Content>
+                        </Button>
+                        <Button Click="ColorButton_Click" AutomationProperties.Name="DarkGreen">
+                            <Button.Content>
+                                <Ellipse Fill="{StaticResource DarkGreen}"/>
+                            </Button.Content>
+                        </Button>
+                        <Button Click="ColorButton_Click" AutomationProperties.Name="LightBlue">
+                            <Button.Content>
+                                <Ellipse Fill="{StaticResource LightBlue}"/>
+                            </Button.Content>
+                        </Button>
+                        <Button Click="ColorButton_Click" AutomationProperties.Name="Green">
+                            <Button.Content>
+                                <Ellipse Fill="{StaticResource Green}"/>
+                            </Button.Content>
+                        </Button>
+                        <Button Click="ColorButton_Click" AutomationProperties.Name="OliveGreen2">
+                            <Button.Content>
+                                <Ellipse Fill="{StaticResource OliveGreen2}"/>
+                            </Button.Content>
+                        </Button>
+                        <Button Click="ColorButton_Click" AutomationProperties.Name="DarkGray">
+                            <Button.Content>
+                                <Ellipse Fill="{StaticResource DarkGray}"/>
+                            </Button.Content>
+                        </Button>
+                        <Button Click="ColorButton_Click" AutomationProperties.Name="DarkBlue">
+                            <Button.Content>
+                                <Ellipse Fill="{StaticResource DarkBlue}"/>
+                            </Button.Content>
+                        </Button>
+                        <Button Click="ColorButton_Click" AutomationProperties.Name="Blue">
+                            <Button.Content>
+                                <Ellipse Fill="{StaticResource Blue}"/>
+                            </Button.Content>
+                        </Button>
+                        <Button Click="ColorButton_Click" AutomationProperties.Name="BlueGray1">
+                            <Button.Content>
+                                <Ellipse Fill="{StaticResource BlueGray1}"/>
+                            </Button.Content>
+                        </Button>
+                        <Button Click="ColorButton_Click" AutomationProperties.Name="BlueGray2">
+                            <Button.Content>
+                                <Ellipse Fill="{StaticResource BlueGray2}"/>
+                            </Button.Content>
+                        </Button>
+                        <Button Click="ColorButton_Click" AutomationProperties.Name="Black">
+                            <Button.Content>
+                                <Ellipse Fill="Black"/>
+                            </Button.Content>
+                        </Button>
+                        <Button Click="ColorButton_Click" AutomationProperties.Name="Purple1">
+                            <Button.Content>
+                                <Ellipse Fill="{StaticResource Purple1}"/>
+                            </Button.Content>
+                        </Button>
+                        <Button Click="ColorButton_Click" AutomationProperties.Name="Purple2">
+                            <Button.Content>
+                                <Ellipse Fill="{StaticResource Purple2}"/>
+                            </Button.Content>
+                        </Button>
+                        <Button Click="ColorButton_Click" AutomationProperties.Name="CoralRed">
+                            <Button.Content>
+                                <Ellipse Fill="{StaticResource CoralRed}"/>
+                            </Button.Content>
+                        </Button>
+                        <Button Click="ColorButton_Click" AutomationProperties.Name="Lavender">
+                            <Button.Content>
+                                <Ellipse Fill="{StaticResource Lavender}"/>
+                            </Button.Content>
+                        </Button>
+                    </VariableSizedWrapGrid>
+                </Flyout>
+            </muxc:DropDownButton.Flyout>
+        </muxc:DropDownButton>
+        
+        <RichEditBox Background="Transparent" BorderThickness="0" Style="{StaticResource RichEditBoxStyle}" x:Name="editor"
+                     Height="900" RelativePanel.Below="openFileButton" RelativePanel.AlignLeftWithPanel="True"
+                     RelativePanel.AlignRightWithPanel="True" TextChanged="Editor_TextChanged"/>
     </RelativePanel>
 
 </Page>
-    
-

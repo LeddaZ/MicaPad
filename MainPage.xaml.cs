@@ -3,6 +3,9 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Windows.ApplicationModel;
+using Windows.Storage;
+using Windows.Storage.Pickers;
+using Windows.Storage.Provider;
 using Windows.System.Profile;
 using Windows.UI;
 using Windows.UI.ViewManagement;
@@ -18,7 +21,7 @@ namespace MicaPad
 
         private bool hasUnsavedChanges = false;
         private int editCount = 0;
-        private Windows.Storage.StorageFile currentFile;
+        private StorageFile currentFile;
         private static readonly AcrylicBrush darkDialogBrush = new AcrylicBrush()
         {
             TintColor = Color.FromArgb(255, 43, 43, 43)
@@ -49,7 +52,8 @@ namespace MicaPad
             }
 
             // Show warning button on Windows 10
-            if (GetWinVer().Equals("10")) {
+            if (GetWinVer().Equals("10"))
+            {
                 warningButton.Visibility = Visibility.Visible;
             }
 
@@ -87,7 +91,7 @@ namespace MicaPad
         private Style SetButtonStyle(bool isDefaultButton)
         {
             var buttonStyle = new Style(typeof(Button));
-            if(isDefaultButton)
+            if (isDefaultButton)
             {
                 var color = new UISettings().GetColorValue(UIColorType.Accent);
                 var brush = new SolidColorBrush(Color.FromArgb(color.A, color.R, color.G, color.B));
@@ -204,7 +208,23 @@ namespace MicaPad
                     case ContentDialogResult.Primary:
                         /* await is needed, otherwise the save and open dialogs will show
                          * at the same time */
-                        await Save();
+                        try
+                        {
+                            await Save();
+                        }
+                        catch (System.IO.FileLoadException)
+                        {
+                            ContentDialog errorDialog = new ContentDialog()
+                            {
+                                Title = "File saving error",
+                                Content = "Sorry, I couldn't save the file.",
+                                CloseButtonText = "Ok",
+                                CornerRadius = new CornerRadius(8)
+                            };
+                            SetDialogBackground(errorDialog);
+                            errorDialog.CloseButtonStyle = SetButtonStyle(true);
+                            await errorDialog.ShowAsync();
+                        }
                         break;
                     case ContentDialogResult.Secondary:
                         break;
@@ -214,19 +234,19 @@ namespace MicaPad
             }
 
             // Opens the rtf file
-            Windows.Storage.Pickers.FileOpenPicker open = new Windows.Storage.Pickers.FileOpenPicker
+            FileOpenPicker open = new FileOpenPicker
             {
-                SuggestedStartLocation = Windows.Storage.Pickers.PickerLocationId.DocumentsLibrary
+                SuggestedStartLocation = PickerLocationId.DocumentsLibrary
             };
             open.FileTypeFilter.Add(".rtf");
 
-            Windows.Storage.StorageFile file = await open.PickSingleFileAsync();
+            StorageFile file = await open.PickSingleFileAsync();
 
             if (file != null)
             {
                 try
                 {
-                    Windows.Storage.Streams.IRandomAccessStream randAccStream = await file.OpenAsync(Windows.Storage.FileAccessMode.Read);
+                    Windows.Storage.Streams.IRandomAccessStream randAccStream = await file.OpenAsync(FileAccessMode.Read);
 
                     // Load the file into the Document property of the RichEditBox
                     editor.Document.LoadFromStream(Windows.UI.Text.TextSetOptions.FormatRtf, randAccStream);
@@ -255,31 +275,47 @@ namespace MicaPad
         }
 
         // Calls the Save() method to save the file
-        private void SaveButton_Click(object sender, RoutedEventArgs e)
+        private async void SaveButton_Click(object sender, RoutedEventArgs e)
         {
-            _ = Save();
+            try
+            {
+                await Save();
+            }
+            catch (System.IO.FileLoadException)
+            {
+                ContentDialog errorDialog = new ContentDialog()
+                {
+                    Title = "File saving error",
+                    Content = "Sorry, I couldn't save the file.",
+                    CloseButtonText = "Ok",
+                    CornerRadius = new CornerRadius(8)
+                };
+                SetDialogBackground(errorDialog);
+                errorDialog.CloseButtonStyle = SetButtonStyle(true);
+                await errorDialog.ShowAsync();
+            }
         }
 
         // Saves the file
         private async Task Save()
         {
-            Windows.Storage.StorageFile file = currentFile;
+            StorageFile file = currentFile;
 
             if (file != null)
             {
                 /* Prevent updates to the remote version of the file until we
                  * finish making changes and call CompleteUpdatesAsync */
-                Windows.Storage.CachedFileManager.DeferUpdates(file);
+                CachedFileManager.DeferUpdates(file);
 
                 // write to file
-                Windows.Storage.Streams.IRandomAccessStream randAccStream = await file.OpenAsync(Windows.Storage.FileAccessMode.ReadWrite);
+                Windows.Storage.Streams.IRandomAccessStream randAccStream = await file.OpenAsync(FileAccessMode.ReadWrite);
 
                 editor.Document.SaveToStream(Windows.UI.Text.TextGetOptions.FormatRtf, randAccStream);
 
                 /* Let Windows know that we're finished changing the file so the
                  * other app can update the remote version of the file */
-                Windows.Storage.Provider.FileUpdateStatus status = await Windows.Storage.CachedFileManager.CompleteUpdatesAsync(file);
-                if (status != Windows.Storage.Provider.FileUpdateStatus.Complete)
+                FileUpdateStatus status = await CachedFileManager.CompleteUpdatesAsync(file);
+                if (status != FileUpdateStatus.Complete)
                 {
                     Windows.UI.Popups.MessageDialog errorBox = new Windows.UI.Popups.MessageDialog("File " + file.Name + " couldn't be saved.");
                     await errorBox.ShowAsync();
@@ -293,9 +329,9 @@ namespace MicaPad
         // Shows the file save dialog and saves the file afterwards
         private async void SaveAsButton_Click(object sender, RoutedEventArgs e)
         {
-            Windows.Storage.Pickers.FileSavePicker savePicker = new Windows.Storage.Pickers.FileSavePicker
+            FileSavePicker savePicker = new FileSavePicker
             {
-                SuggestedStartLocation = Windows.Storage.Pickers.PickerLocationId.DocumentsLibrary
+                SuggestedStartLocation = PickerLocationId.DocumentsLibrary
             };
 
             // Dropdown of file types the user can save the file as
@@ -304,34 +340,35 @@ namespace MicaPad
             // Default file name if the user does not type one in or select a file to replace
             savePicker.SuggestedFileName = "New Document";
 
-            Windows.Storage.StorageFile file = await savePicker.PickSaveFileAsync();
-
+            StorageFile file = await savePicker.PickSaveFileAsync();
             if (file != null)
             {
-                /* Prevent updates to the remote version of the file until we
-                 * finish making changes and call CompleteUpdatesAsync */
-                Windows.Storage.CachedFileManager.DeferUpdates(file);
-
+                // Prevent updates to the remote version of the file until we
+                // finish making changes and call CompleteUpdatesAsync.
+                CachedFileManager.DeferUpdates(file);
                 // write to file
-                Windows.Storage.Streams.IRandomAccessStream randAccStream = await file.OpenAsync(Windows.Storage.FileAccessMode.ReadWrite);
-
-                editor.Document.SaveToStream(Windows.UI.Text.TextGetOptions.FormatRtf, randAccStream);
-
-                /* Let Windows know that we're finished changing the file so the
-                 * other app can update the remote version of the file */
-                Windows.Storage.Provider.FileUpdateStatus status = await Windows.Storage.CachedFileManager.CompleteUpdatesAsync(file);
-                if (status != Windows.Storage.Provider.FileUpdateStatus.Complete)
+                using (Windows.Storage.Streams.IRandomAccessStream randAccStream =
+                    await file.OpenAsync(FileAccessMode.ReadWrite))
                 {
-                    Windows.UI.Popups.MessageDialog errorBox = new Windows.UI.Popups.MessageDialog("File " + file.Name + " couldn't be saved.");
-                    await errorBox.ShowAsync();
+                    editor.Document.SaveToStream(Windows.UI.Text.TextGetOptions.FormatRtf, randAccStream);
                 }
 
-                // Store the current file
-                currentFile = file;
-
-                // Since the file has been saved, there are no unsaved changes now
-                hasUnsavedChanges = false;
+                // Let Windows know that we're finished changing the file so the
+                // other app can update the remote version of the file.
+                FileUpdateStatus status = await CachedFileManager.CompleteUpdatesAsync(file);
+                if (status != FileUpdateStatus.Complete)
+                {
+                    Windows.UI.Popups.MessageDialog errorBox =
+                        new Windows.UI.Popups.MessageDialog("File " + file.Name + " couldn't be saved.");
+                    await errorBox.ShowAsync();
+                }
             }
+
+            // Store the current file
+            currentFile = file;
+
+            // Since the file has been saved, there are no unsaved changes now
+            hasUnsavedChanges = false;
         }
 
         // Shows the about dialog
@@ -416,6 +453,18 @@ namespace MicaPad
                 hasUnsavedChanges = true;
             }
             editCount++;
+        }
+
+        private void ColorButton_Click(object sender, RoutedEventArgs e)
+        {
+            Button clickedColor = (Button)sender;
+            var ellipse = (Windows.UI.Xaml.Shapes.Ellipse)clickedColor.Content;
+            var color = ((SolidColorBrush)ellipse.Fill).Color;
+
+            editor.Document.Selection.CharacterFormat.ForegroundColor = color;
+
+            fontColorButton.Flyout.Hide();
+            editor.Focus(FocusState.Keyboard);
         }
 
     }
