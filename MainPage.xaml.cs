@@ -19,7 +19,6 @@ namespace MicaPad
         private bool hasUnsavedChanges = false;
         private int editCount = 0;
         private Windows.Storage.StorageFile currentFile;
-        // ContentDialog brushes
         private static readonly AcrylicBrush darkDialogBrush = new AcrylicBrush()
         {
             TintColor = Color.FromArgb(255, 43, 43, 43)
@@ -28,6 +27,7 @@ namespace MicaPad
         public MainPage()
         {
             this.InitializeComponent();
+
             // Gets all fonts installed system-wide and adds them to the font flyout
             var fonts = Microsoft.Graphics.Canvas.Text.CanvasTextFormat.GetSystemFontFamilies();
             int i = 0;
@@ -41,15 +41,18 @@ namespace MicaPad
                 FontFlyout.Items.Insert(i, flyoutItem);
                 i++;
             }
+
             // Sets corner radius for all items in the font flyout
             foreach (var item in FontFlyout.Items)
             {
                 item.CornerRadius = new CornerRadius(4);
             }
+
             // Show warning button on Windows 10
             if (GetWinVer().Equals("10")) {
                 warningButton.Visibility = Visibility.Visible;
             }
+
             // Run update check on app startup
             _ = CheckUpdates();
         }
@@ -176,6 +179,7 @@ namespace MicaPad
             /* Workaround to stop the RichEditBox from detecting unsaved changes even if the
              * file has just been opened */
             editCount = 0;
+
             /* Checks if the current document has unsaved changes and shows a confirmation
              * dialog in that case */
             if (hasUnsavedChanges)
@@ -241,13 +245,16 @@ namespace MicaPad
                     await errorDialog.ShowAsync();
                 }
             }
+
             // Store the current file
             currentFile = file;
+
             // The file has just been opened, so there are no unsaved changes
             hasUnsavedChanges = false;
             editCount = 0;
         }
 
+        // Calls the Save() method to save the file
         private void SaveButton_Click(object sender, RoutedEventArgs e)
         {
             _ = Save();
@@ -263,6 +270,7 @@ namespace MicaPad
                 /* Prevent updates to the remote version of the file until we
                  * finish making changes and call CompleteUpdatesAsync */
                 Windows.Storage.CachedFileManager.DeferUpdates(file);
+
                 // write to file
                 Windows.Storage.Streams.IRandomAccessStream randAccStream = await file.OpenAsync(Windows.Storage.FileAccessMode.ReadWrite);
 
@@ -276,6 +284,7 @@ namespace MicaPad
                     Windows.UI.Popups.MessageDialog errorBox = new Windows.UI.Popups.MessageDialog("File " + file.Name + " couldn't be saved.");
                     await errorBox.ShowAsync();
                 }
+
                 // Since the file has been saved, there are no unsaved changes now
                 hasUnsavedChanges = false;
             }
@@ -302,6 +311,7 @@ namespace MicaPad
                 /* Prevent updates to the remote version of the file until we
                  * finish making changes and call CompleteUpdatesAsync */
                 Windows.Storage.CachedFileManager.DeferUpdates(file);
+
                 // write to file
                 Windows.Storage.Streams.IRandomAccessStream randAccStream = await file.OpenAsync(Windows.Storage.FileAccessMode.ReadWrite);
 
@@ -315,8 +325,10 @@ namespace MicaPad
                     Windows.UI.Popups.MessageDialog errorBox = new Windows.UI.Popups.MessageDialog("File " + file.Name + " couldn't be saved.");
                     await errorBox.ShowAsync();
                 }
+
                 // Store the current file
                 currentFile = file;
+
                 // Since the file has been saved, there are no unsaved changes now
                 hasUnsavedChanges = false;
             }
