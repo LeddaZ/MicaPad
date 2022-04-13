@@ -521,7 +521,7 @@
             </AppBarButton.Flyout>
         </AppBarButton>
         
-        <AppBarButton x:Name="fontButton" Icon="Font" Label="Font" RelativePanel.LeftOf="boldButton" Margin="0,0,8,0"
+        <AppBarButton x:Name="fontButton" Icon="Font" Label="Font" RelativePanel.LeftOf="spellCheckButton" Margin="0,0,8,0"
                       CornerRadius="4">
             <AppBarButton.Flyout>
                 <MenuFlyout x:Name="FontFlyout">
@@ -534,7 +534,10 @@
                 </MenuFlyout>
             </AppBarButton.Flyout>
         </AppBarButton>
-        
+
+        <AppBarToggleButton x:Name="spellCheckButton" Icon="Character" Label="Spell check" Click="SpellCheckButton_Click"
+                            RelativePanel.LeftOf="boldButton" Margin="0,0,8,0" CornerRadius="4" IsChecked="True"/>
+
         <AppBarToggleButton x:Name="boldButton" Icon="Bold" Label="Bold" Click="BoldButton_Click"
                             RelativePanel.LeftOf="italicButton" Margin="0,0,8,0" CornerRadius="4"/>
         <AppBarToggleButton x:Name="italicButton" Icon="Italic" Label="Italic" Click="ItalicButton_Click"

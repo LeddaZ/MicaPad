@@ -401,6 +401,20 @@ namespace MicaPad
             _ = await warningDialog.ShowAsync();
         }
 
+        // Enables or disables spell check
+        private void SpellCheckButton_Click(object sender, RoutedEventArgs e)
+        {
+            if(editor.IsSpellCheckEnabled)
+            {
+                editor.IsSpellCheckEnabled = false;
+            }
+            else
+            {
+                editor.IsSpellCheckEnabled = true;
+                
+            }
+        }
+
         // Enables or disables bold text
         private void BoldButton_Click(object sender, RoutedEventArgs e)
         {
@@ -445,16 +459,7 @@ namespace MicaPad
 
         }
 
-        // Detects when the document has been modified (it will now have unsaved changes)
-        private void Editor_TextChanged(object sender, RoutedEventArgs e)
-        {
-            if (editCount > 0)
-            {
-                hasUnsavedChanges = true;
-            }
-            editCount++;
-        }
-
+        // Sets the font color
         private void ColorButton_Click(object sender, RoutedEventArgs e)
         {
             Button clickedColor = (Button)sender;
@@ -465,6 +470,16 @@ namespace MicaPad
 
             fontColorButton.Flyout.Hide();
             editor.Focus(FocusState.Keyboard);
+        }
+
+        // Detects when the document has been modified (it will now have unsaved changes)
+        private void Editor_TextChanged(object sender, RoutedEventArgs e)
+        {
+            if (editCount > 0)
+            {
+                hasUnsavedChanges = true;
+            }
+            editCount++;
         }
 
     }
