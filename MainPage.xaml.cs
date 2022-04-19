@@ -63,7 +63,7 @@ namespace MicaPad
             var r = sourceColor.Color.R;
             var g = sourceColor.Color.G;
             var b = sourceColor.Color.B;
-            return (((r * 0.299) + (g * 0.587) + (b * 0.114)) > 100) ? Color.FromArgb(255, 0, 0, 0) : Color.FromArgb(255, 255, 255, 255);
+            return (((r * 0.299) + (g * 0.587) + (b * 0.114)) > 145) ? Color.FromArgb(255, 0, 0, 0) : Color.FromArgb(255, 255, 255, 255);
         }
 
         // Sets my custom button style
