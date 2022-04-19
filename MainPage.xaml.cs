@@ -22,10 +22,6 @@ namespace MicaPad
         private bool hasUnsavedChanges = false;
         private int editCount = 0;
         private StorageFile currentFile;
-        private static readonly AcrylicBrush darkDialogBrush = new AcrylicBrush()
-        {
-            TintColor = Color.FromArgb(255, 43, 43, 43)
-        };
 
         public MainPage()
         {
@@ -59,23 +55,6 @@ namespace MicaPad
 
             // Run update check on app startup
             _ = CheckUpdates();
-        }
-
-        // Get current system theme
-        private string GetSystemTheme()
-        {
-            UISettings uiSettings = new UISettings();
-            Color color = uiSettings.GetColorValue(UIColorType.Background);
-            return color.ToString();
-        }
-
-        // Sets ContentDialog background according to system theme
-        private void SetDialogBackground(ContentDialog dialog)
-        {
-            if (!GetSystemTheme().Equals("#FFFFFFFF"))
-            {
-                dialog.Background = darkDialogBrush;
-            }
         }
 
         // Returns white or black based on the given color
@@ -148,7 +127,6 @@ namespace MicaPad
                     CloseButtonText = "Ignore",
                     CornerRadius = new CornerRadius(8)
                 };
-                SetDialogBackground(updateDialog);
                 updateDialog.PrimaryButtonStyle = SetButtonStyle(true);
                 updateDialog.CloseButtonStyle = SetButtonStyle(false);
                 ContentDialogResult result = await updateDialog.ShowAsync();
@@ -197,7 +175,6 @@ namespace MicaPad
                     CloseButtonText = "Cancel",
                     CornerRadius = new CornerRadius(8)
                 };
-                SetDialogBackground(unsavedChangesDialog);
                 unsavedChangesDialog.PrimaryButtonStyle = SetButtonStyle(true);
                 unsavedChangesDialog.SecondaryButtonStyle = SetButtonStyle(false);
                 unsavedChangesDialog.CloseButtonStyle = SetButtonStyle(false);
@@ -221,7 +198,6 @@ namespace MicaPad
                                 CloseButtonText = "Ok",
                                 CornerRadius = new CornerRadius(8)
                             };
-                            SetDialogBackground(errorDialog);
                             errorDialog.CloseButtonStyle = SetButtonStyle(true);
                             await errorDialog.ShowAsync();
                         }
@@ -260,7 +236,6 @@ namespace MicaPad
                         CloseButtonText = "Ok",
                         CornerRadius = new CornerRadius(8)
                     };
-                    SetDialogBackground(errorDialog);
                     errorDialog.CloseButtonStyle = SetButtonStyle(true);
                     await errorDialog.ShowAsync();
                 }
@@ -290,7 +265,6 @@ namespace MicaPad
                     CloseButtonText = "Ok",
                     CornerRadius = new CornerRadius(8)
                 };
-                SetDialogBackground(errorDialog);
                 errorDialog.CloseButtonStyle = SetButtonStyle(true);
                 await errorDialog.ShowAsync();
             }
@@ -381,7 +355,6 @@ namespace MicaPad
                 CloseButtonText = "Close",
                 CornerRadius = new CornerRadius(8)
             };
-            SetDialogBackground(aboutDialog);
             aboutDialog.CloseButtonStyle = SetButtonStyle(true);
             _ = await aboutDialog.ShowAsync();
         }
@@ -396,7 +369,6 @@ namespace MicaPad
                 CloseButtonText = "Close",
                 CornerRadius = new CornerRadius(8)
             };
-            SetDialogBackground(warningDialog);
             warningDialog.CloseButtonStyle = SetButtonStyle(true);
             _ = await warningDialog.ShowAsync();
         }
