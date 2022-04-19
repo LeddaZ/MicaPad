@@ -25,7 +25,7 @@ namespace MicaPad
 
         public MainPage()
         {
-            this.InitializeComponent();
+            InitializeComponent();
 
             // Gets all fonts installed system-wide and adds them to the font flyout
             var fonts = Microsoft.Graphics.Canvas.Text.CanvasTextFormat.GetSystemFontFamilies();
@@ -376,14 +376,13 @@ namespace MicaPad
         // Enables or disables spell check
         private void SpellCheckButton_Click(object sender, RoutedEventArgs e)
         {
-            if(editor.IsSpellCheckEnabled)
+            if (editor.IsSpellCheckEnabled)
             {
                 editor.IsSpellCheckEnabled = false;
             }
             else
             {
                 editor.IsSpellCheckEnabled = true;
-                
             }
         }
 
