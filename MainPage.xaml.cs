@@ -67,16 +67,13 @@ namespace MicaPad
         }
 
         // Sets my custom button style
-        private Style SetButtonStyle(bool isDefaultButton)
+        private Style SetButtonStyle()
         {
             var buttonStyle = new Style(typeof(Button));
-            if (isDefaultButton)
-            {
-                var color = new UISettings().GetColorValue(UIColorType.Accent);
-                var brush = new SolidColorBrush(Color.FromArgb(color.A, color.R, color.G, color.B));
-                buttonStyle.Setters.Add(new Setter(BackgroundProperty, brush));
-                buttonStyle.Setters.Add(new Setter(ForegroundProperty, PickTextColor(brush)));
-            }
+            var color = new UISettings().GetColorValue(UIColorType.Accent);
+            var brush = new SolidColorBrush(Color.FromArgb(color.A, color.R, color.G, color.B));
+            buttonStyle.Setters.Add(new Setter(BackgroundProperty, brush));
+            buttonStyle.Setters.Add(new Setter(ForegroundProperty, PickTextColor(brush)));
             buttonStyle.Setters.Add(new Setter(CornerRadiusProperty, new CornerRadius(4)));
             return buttonStyle;
         }
@@ -127,8 +124,7 @@ namespace MicaPad
                     CloseButtonText = "Ignore",
                     CornerRadius = new CornerRadius(8)
                 };
-                updateDialog.PrimaryButtonStyle = SetButtonStyle(true);
-                updateDialog.CloseButtonStyle = SetButtonStyle(false);
+                updateDialog.PrimaryButtonStyle = SetButtonStyle();
                 ContentDialogResult result = await updateDialog.ShowAsync();
 
                 // Go to GitHub releases if the user clicks the "Update" button
@@ -174,9 +170,7 @@ namespace MicaPad
                     CloseButtonText = "Cancel",
                     CornerRadius = new CornerRadius(8)
                 };
-                unsavedChangesDialog.PrimaryButtonStyle = SetButtonStyle(true);
-                unsavedChangesDialog.SecondaryButtonStyle = SetButtonStyle(false);
-                unsavedChangesDialog.CloseButtonStyle = SetButtonStyle(false);
+                unsavedChangesDialog.PrimaryButtonStyle = SetButtonStyle();
                 ContentDialogResult result = await unsavedChangesDialog.ShowAsync();
 
                 switch (result)
@@ -197,7 +191,7 @@ namespace MicaPad
                                 CloseButtonText = "Ok",
                                 CornerRadius = new CornerRadius(8)
                             };
-                            errorDialog.CloseButtonStyle = SetButtonStyle(true);
+                            errorDialog.CloseButtonStyle = SetButtonStyle();
                             await errorDialog.ShowAsync();
                         }
                         break;
@@ -235,7 +229,7 @@ namespace MicaPad
                         CloseButtonText = "Ok",
                         CornerRadius = new CornerRadius(8)
                     };
-                    errorDialog.CloseButtonStyle = SetButtonStyle(true);
+                    errorDialog.CloseButtonStyle = SetButtonStyle();
                     await errorDialog.ShowAsync();
                 }
             }
@@ -264,7 +258,7 @@ namespace MicaPad
                     CloseButtonText = "Ok",
                     CornerRadius = new CornerRadius(8)
                 };
-                errorDialog.CloseButtonStyle = SetButtonStyle(true);
+                errorDialog.CloseButtonStyle = SetButtonStyle();
                 await errorDialog.ShowAsync();
             }
         }
@@ -355,7 +349,7 @@ namespace MicaPad
                 CloseButtonText = "Close",
                 CornerRadius = new CornerRadius(8)
             };
-            aboutDialog.CloseButtonStyle = SetButtonStyle(true);
+            aboutDialog.CloseButtonStyle = SetButtonStyle();
             ContentDialogResult result = await aboutDialog.ShowAsync();
 
             // Go to GitHub if the user clicks the "View on GitHub" button
@@ -375,7 +369,7 @@ namespace MicaPad
                 CloseButtonText = "Close",
                 CornerRadius = new CornerRadius(8)
             };
-            warningDialog.CloseButtonStyle = SetButtonStyle(true);
+            warningDialog.CloseButtonStyle = SetButtonStyle();
             _ = await warningDialog.ShowAsync();
         }
 
