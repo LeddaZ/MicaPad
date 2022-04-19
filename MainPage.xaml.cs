@@ -131,7 +131,7 @@ namespace MicaPad
                 updateDialog.CloseButtonStyle = SetButtonStyle(false);
                 ContentDialogResult result = await updateDialog.ShowAsync();
 
-                // Go to GitHub if the user clicks the "Update" button
+                // Go to GitHub releases if the user clicks the "Update" button
                 if (result == ContentDialogResult.Primary)
                 {
                     Uri uri = new Uri(@"https://github.com/LeddaZ/MicaPad/releases/latest");
@@ -352,11 +352,19 @@ namespace MicaPad
             {
                 Title = "About MicaPad",
                 Content = $"MicaPad is a Notepad alternative with some additional features, like Rich Text support and the beautiful Mica backdrop (which inspired the name).\nVersion {GetVersion()}, running on Windows {GetWinVer()} build {GetWinBuild()}.",
+                PrimaryButtonText = "View on GitHub",
                 CloseButtonText = "Close",
                 CornerRadius = new CornerRadius(8)
             };
             aboutDialog.CloseButtonStyle = SetButtonStyle(true);
-            _ = await aboutDialog.ShowAsync();
+            ContentDialogResult result = await aboutDialog.ShowAsync();
+
+            // Go to GitHub if the user clicks the "View on GitHub" button
+            if (result == ContentDialogResult.Primary)
+            {
+                Uri uri = new Uri(@"https://github.com/LeddaZ/MicaPad");
+                _ = await Windows.System.Launcher.LaunchUriAsync(uri);
+            }
         }
 
         // Shows the warning dialog
