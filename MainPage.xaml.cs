@@ -121,8 +121,7 @@ namespace MicaPad
                     Title = "Update available",
                     Content = $"Current version: {GetVersion()}\nLatest version: {latestVersion}",
                     PrimaryButtonText = "Update",
-                    CloseButtonText = "Ignore",
-                    CornerRadius = new CornerRadius(8)
+                    CloseButtonText = "Ignore"
                 };
                 updateDialog.PrimaryButtonStyle = SetButtonStyle();
                 ContentDialogResult result = await updateDialog.ShowAsync();
@@ -167,8 +166,7 @@ namespace MicaPad
                     Content = "There are unsaved changes. Do you want to save the file?",
                     PrimaryButtonText = "Save",
                     SecondaryButtonText = "Don't save",
-                    CloseButtonText = "Cancel",
-                    CornerRadius = new CornerRadius(8)
+                    CloseButtonText = "Cancel"
                 };
                 unsavedChangesDialog.PrimaryButtonStyle = SetButtonStyle();
                 ContentDialogResult result = await unsavedChangesDialog.ShowAsync();
@@ -188,8 +186,7 @@ namespace MicaPad
                             {
                                 Title = "File saving error",
                                 Content = "Sorry, I couldn't save the file.",
-                                CloseButtonText = "Ok",
-                                CornerRadius = new CornerRadius(8)
+                                CloseButtonText = "Ok"
                             };
                             errorDialog.CloseButtonStyle = SetButtonStyle();
                             await errorDialog.ShowAsync();
@@ -226,8 +223,7 @@ namespace MicaPad
                     {
                         Title = "File open error",
                         Content = "Sorry, I couldn't open the file.",
-                        CloseButtonText = "Ok",
-                        CornerRadius = new CornerRadius(8)
+                        CloseButtonText = "Ok"
                     };
                     errorDialog.CloseButtonStyle = SetButtonStyle();
                     await errorDialog.ShowAsync();
@@ -255,8 +251,7 @@ namespace MicaPad
                 {
                     Title = "File saving error",
                     Content = "Sorry, I couldn't save the file.",
-                    CloseButtonText = "Ok",
-                    CornerRadius = new CornerRadius(8)
+                    CloseButtonText = "Ok"
                 };
                 errorDialog.CloseButtonStyle = SetButtonStyle();
                 await errorDialog.ShowAsync();
@@ -346,8 +341,7 @@ namespace MicaPad
                 Title = "About MicaPad",
                 Content = $"MicaPad is a Notepad alternative with some additional features, like Rich Text support and the beautiful Mica backdrop (which inspired the name).\nVersion {GetVersion()}, running on Windows {GetWinVer()} build {GetWinBuild()}.",
                 PrimaryButtonText = "View on GitHub",
-                CloseButtonText = "Close",
-                CornerRadius = new CornerRadius(8)
+                CloseButtonText = "Close"
             };
             aboutDialog.CloseButtonStyle = SetButtonStyle();
             ContentDialogResult result = await aboutDialog.ShowAsync();
@@ -366,8 +360,7 @@ namespace MicaPad
             {
                 Title = "Warning",
                 Content = "Since you are using Windows 10, you won't see the Mica backdrop, as it's only supported on Windows 11.",
-                CloseButtonText = "Close",
-                CornerRadius = new CornerRadius(8)
+                CloseButtonText = "Close"
             };
             warningDialog.CloseButtonStyle = SetButtonStyle();
             _ = await warningDialog.ShowAsync();
