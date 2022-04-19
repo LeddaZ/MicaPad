@@ -134,8 +134,7 @@ namespace MicaPad
                 // Go to GitHub releases if the user clicks the "Update" button
                 if (result == ContentDialogResult.Primary)
                 {
-                    Uri uri = new Uri(@"https://github.com/LeddaZ/MicaPad/releases/latest");
-                    _ = await Windows.System.Launcher.LaunchUriAsync(uri);
+                    _ = await Windows.System.Launcher.LaunchUriAsync(new Uri(@"https://github.com/LeddaZ/MicaPad/releases/latest"));
                 }
             }
         }
@@ -362,8 +361,7 @@ namespace MicaPad
             // Go to GitHub if the user clicks the "View on GitHub" button
             if (result == ContentDialogResult.Primary)
             {
-                Uri uri = new Uri(@"https://github.com/LeddaZ/MicaPad");
-                _ = await Windows.System.Launcher.LaunchUriAsync(uri);
+                _ = await Windows.System.Launcher.LaunchUriAsync(new Uri(@"https://github.com/LeddaZ/MicaPad"));
             }
         }
 
