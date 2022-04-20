@@ -502,8 +502,7 @@
                         <MenuFlyout x:Name="SizeFlyout">
                             <MenuFlyout.MenuFlyoutPresenterStyle>
                                 <Style TargetType="MenuFlyoutPresenter">
-                                    <Setter Property="CornerRadius" Value="4"/>
-                                    <Setter Property="Padding" Value="5"/>
+                                    <Setter Property="Padding" Value="4"/>
                                 </Style>
                             </MenuFlyout.MenuFlyoutPresenterStyle>
                             <MenuFlyoutItem Text="8" Click="SizeFlyoutItem_Click" CornerRadius="4"/>
@@ -532,8 +531,7 @@
                         <MenuFlyout x:Name="FontFlyout">
                             <MenuFlyout.MenuFlyoutPresenterStyle>
                                 <Style TargetType="MenuFlyoutPresenter">
-                                    <Setter Property="CornerRadius" Value="4"/>
-                                    <Setter Property="Padding" Value="5"/>
+                                    <Setter Property="Padding" Value="4"/>
                                 </Style>
                             </MenuFlyout.MenuFlyoutPresenterStyle>
                         </MenuFlyout>

@@ -44,12 +44,6 @@ namespace MicaPad
                 i++;
             }
 
-            // Sets corner radius for all items in the font flyout
-            foreach (var item in FontFlyout.Items)
-            {
-                item.CornerRadius = new CornerRadius(4);
-            }
-
             // Show warning button when Windows 10 or Battery Saver is detected
             if (GetWinVer().Equals("10") || Windows.System.Power.PowerManager.EnergySaverStatus.Equals("On"))
             {
