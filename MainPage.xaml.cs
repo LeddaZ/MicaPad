@@ -444,6 +444,12 @@ namespace MicaPad
             fontColorButton.Flyout.Hide();
             editor.Focus(FocusState.Keyboard);
         }
+        
+        // Sets the font color using the color picker
+        private void ColorPicker_ColorChanged(Microsoft.UI.Xaml.Controls.ColorPicker sender, Microsoft.UI.Xaml.Controls.ColorChangedEventArgs args)
+        {
+            editor.Document.Selection.CharacterFormat.ForegroundColor = sender.Color;
+        }
 
         // Detects when the document has been modified (it will now have unsaved changes)
         private void Editor_TextChanged(object sender, RoutedEventArgs e)

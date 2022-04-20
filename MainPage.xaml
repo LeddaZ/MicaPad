@@ -521,8 +521,8 @@
             </AppBarButton.Flyout>
         </AppBarButton>
         
-        <AppBarButton x:Name="fontButton" Icon="Font" Label="Font" RelativePanel.LeftOf="spellCheckButton" Margin="0,0,8,0"
-                      CornerRadius="4">
+        <AppBarButton x:Name="fontButton" Icon="Font" Label="Font" RelativePanel.LeftOf="spellCheckButton"
+                      Margin="0,0,8,0" CornerRadius="4">
             <AppBarButton.Flyout>
                 <MenuFlyout x:Name="FontFlyout">
                     <MenuFlyout.MenuFlyoutPresenterStyle>
@@ -543,11 +543,11 @@
         <AppBarToggleButton x:Name="italicButton" Icon="Italic" Label="Italic" Click="ItalicButton_Click"
                             RelativePanel.LeftOf="underlineButton" Margin="0,0,8,0" CornerRadius="4"/>
         <AppBarToggleButton x:Name="underlineButton" Icon="Underline" Label="Underline" Click="UnderlineButton_Click"
-                             CornerRadius="4" RelativePanel.LeftOf="fontColorButton" Margin="0,0,8,0"/>
+                            CornerRadius="4" RelativePanel.LeftOf="fontColorButton" Margin="0,0,8,0"/>
         
         <muxc:DropDownButton x:Name="fontColorButton" BorderThickness="0" AutomationProperties.Name="Font color"
-                             ToolTipService.ToolTip="Font color" Background="Transparent" RelativePanel.AlignRightWithPanel="True"
-                             Height="64" Width="68">
+                             ToolTipService.ToolTip="Font color" Background="Transparent"
+                             RelativePanel.LeftOf="colorPickerButton" Height="64" Width="68">
             <SymbolIcon Symbol="FontColor"/>
             <muxc:DropDownButton.Flyout>
                 <Flyout Placement="Bottom">
@@ -721,10 +721,26 @@
                 </Flyout>
             </muxc:DropDownButton.Flyout>
         </muxc:DropDownButton>
-        
-        <RichEditBox Background="Transparent" BorderThickness="0" Style="{StaticResource RichEditBoxStyle}" x:Name="editor"
-                     Height="900" RelativePanel.Below="openFileButton" RelativePanel.AlignLeftWithPanel="True"
-                     RelativePanel.AlignRightWithPanel="True" TextChanged="Editor_TextChanged"/>
+
+        <muxc:DropDownButton x:Name="colorPickerButton" BorderThickness="0" AutomationProperties.Name="Color picker"
+                             ToolTipService.ToolTip="Color picker" Background="Transparent"
+                             RelativePanel.AlignRightWithPanel="True" Height="64" Width="68">
+            <SymbolIcon Symbol="Accept"/>
+            <muxc:DropDownButton.Flyout>
+                <Flyout Placement="Bottom">
+                    <muxc:ColorPicker ColorSpectrumShape="Box" IsMoreButtonVisible="False"
+                                      IsColorSliderVisible="True" IsColorChannelTextInputVisible="True"
+                                      IsHexInputVisible="True" IsAlphaEnabled="False"
+                                      IsAlphaSliderVisible="True" IsAlphaTextInputVisible="True"
+                                      ColorChanged="ColorPicker_ColorChanged"/>
+                </Flyout>
+            </muxc:DropDownButton.Flyout>
+        </muxc:DropDownButton>
+
+        <RichEditBox Background="Transparent" BorderThickness="0" Style="{StaticResource RichEditBoxStyle}"
+                     x:Name="editor" Height="900" RelativePanel.Below="openFileButton"
+                     RelativePanel.AlignLeftWithPanel="True" RelativePanel.AlignRightWithPanel="True"
+                     TextChanged="Editor_TextChanged"/>
     </RelativePanel>
 
 </Page>
