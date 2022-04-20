@@ -164,7 +164,7 @@ namespace MicaPad
             {
                 ContentDialog unsavedChangesDialog = new ContentDialog
                 {
-                    Title = "MicaPad",
+                    Title = "Warning",
                     Content = "There are unsaved changes. Do you want to save the file?",
                     PrimaryButtonText = "Save",
                     SecondaryButtonText = "Don't save",
