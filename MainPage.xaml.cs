@@ -12,6 +12,7 @@ using Windows.UI.ViewManagement;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Media;
+using Windows.UI.Xaml.Shapes;
 
 namespace MicaPad
 {
@@ -30,11 +31,11 @@ namespace MicaPad
             InitializeComponent();
 
             // Gets all fonts installed system-wide and adds them to the font flyout
-            var fonts = Microsoft.Graphics.Canvas.Text.CanvasTextFormat.GetSystemFontFamilies();
+            string[] fonts = Microsoft.Graphics.Canvas.Text.CanvasTextFormat.GetSystemFontFamilies();
             int i = 0;
-            foreach (var item in fonts)
+            foreach (string item in fonts)
             {
-                var flyoutItem = new MenuFlyoutItem
+                MenuFlyoutItem flyoutItem = new MenuFlyoutItem
                 {
                     Text = item
                 };
@@ -62,18 +63,18 @@ namespace MicaPad
         // Returns white or black based on the given color
         private Color PickTextColor(SolidColorBrush sourceColor)
         {
-            var r = sourceColor.Color.R;
-            var g = sourceColor.Color.G;
-            var b = sourceColor.Color.B;
+            byte r = sourceColor.Color.R;
+            byte g = sourceColor.Color.G;
+            byte b = sourceColor.Color.B;
             return (((r * 0.299) + (g * 0.587) + (b * 0.114)) > 145) ? Color.FromArgb(255, 0, 0, 0) : Color.FromArgb(255, 255, 255, 255);
         }
 
         // Sets my custom button style
         private Style SetButtonStyle()
         {
-            var buttonStyle = new Style(typeof(Button));
-            var color = new UISettings().GetColorValue(UIColorType.Accent);
-            var brush = new SolidColorBrush(Color.FromArgb(color.A, color.R, color.G, color.B));
+            Style buttonStyle = new Style(typeof(Button));
+            Color color = new UISettings().GetColorValue(UIColorType.Accent);
+            SolidColorBrush brush = new SolidColorBrush(Color.FromArgb(color.A, color.R, color.G, color.B));
             buttonStyle.Setters.Add(new Setter(BackgroundProperty, brush));
             buttonStyle.Setters.Add(new Setter(ForegroundProperty, PickTextColor(brush)));
             buttonStyle.Setters.Add(new Setter(CornerRadiusProperty, new CornerRadius(4)));
@@ -111,7 +112,7 @@ namespace MicaPad
             IReadOnlyList<Release> releases = await client.Repository.Release.GetAll("LeddaZ", "MicaPad");
 
             // Setup versions
-            var latestVersion = new Version(releases[0].Name);
+            Version latestVersion = new Version(releases[0].Name);
             Version localVersion = new Version(GetVersion());
 
             // Compare the versions
@@ -436,15 +437,15 @@ namespace MicaPad
         private void ColorButton_Click(object sender, RoutedEventArgs e)
         {
             Button clickedColor = (Button)sender;
-            var ellipse = (Windows.UI.Xaml.Shapes.Ellipse)clickedColor.Content;
-            var color = ((SolidColorBrush)ellipse.Fill).Color;
+            Ellipse ellipse = (Ellipse)clickedColor.Content;
+            Color color = ((SolidColorBrush)ellipse.Fill).Color;
 
             editor.Document.Selection.CharacterFormat.ForegroundColor = color;
 
             fontColorButton.Flyout.Hide();
             editor.Focus(FocusState.Keyboard);
         }
-        
+
         // Sets the font color using the color picker
         private void ColorPicker_ColorChanged(Microsoft.UI.Xaml.Controls.ColorPicker sender, Microsoft.UI.Xaml.Controls.ColorChangedEventArgs args)
         {
