@@ -22,6 +22,8 @@ namespace MicaPad
         private bool hasUnsavedChanges = false;
         private int editCount = 0;
         private StorageFile currentFile;
+        private readonly string win10 = "Since you are using Windows 10, you won't see the Mica backdrop, as it's only supported on Windows 11.";
+        private readonly string batterysaver = "You won't see the Mica backdrop because Battery Saver is enabled, which disables transparency.";
 
         public MainPage()
         {
@@ -47,8 +49,8 @@ namespace MicaPad
                 item.CornerRadius = new CornerRadius(4);
             }
 
-            // Show warning button on Windows 10
-            if (GetWinVer().Equals("10"))
+            // Show warning button when Windows 10 or Battery Saver is detected
+            if (GetWinVer().Equals("10") || Windows.System.Power.PowerManager.EnergySaverStatus.Equals("On"))
             {
                 warningButton.Visibility = Visibility.Visible;
             }
@@ -359,9 +361,16 @@ namespace MicaPad
             ContentDialog warningDialog = new ContentDialog()
             {
                 Title = "Warning",
-                Content = "Since you are using Windows 10, you won't see the Mica backdrop, as it's only supported on Windows 11.",
                 CloseButtonText = "Close"
             };
+            if (GetWinVer().Equals("10"))
+            {
+                warningDialog.Content += win10 + " ";
+            }
+            if (Windows.System.Power.PowerManager.EnergySaverStatus.Equals("On"))
+            {
+                warningDialog.Content += batterysaver;
+            }
             warningDialog.CloseButtonStyle = SetButtonStyle();
             _ = await warningDialog.ShowAsync();
         }
