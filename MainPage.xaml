@@ -731,7 +731,7 @@
                                      AutomationProperties.Name="Color picker"
                                      ToolTipService.ToolTip="Color picker" Background="Transparent"
                                      Height="64" Width="68" RelativePanel.RightOf="fontColorButton">
-                    <SymbolIcon Symbol="Accept"/>
+                    <SymbolIcon Symbol="Add"/>
                     <muxc:DropDownButton.Flyout>
                         <Flyout Placement="Bottom">
                             <muxc:ColorPicker ColorSpectrumShape="Box" IsMoreButtonVisible="False"
